@@ -52,7 +52,7 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
 .btn-primary,.btn-amber{padding:12px 24px;font-family:inherit;font-size:14px;font-weight:600;color:var(--white);border:none;border-radius:6px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center}
 .btn-primary{background:var(--dark-green)}
 .btn-primary:hover{background:var(--mid-green)}
-.btn-amber{background:var(--dark-green);width:100%}
+.btn-amber{background:var(--dark-green);width:auto;align-self:flex-end}
 .btn-amber:hover{background:var(--mid-green)}
 
 /* SECURE SHARING LINKS BOX */
@@ -87,7 +87,6 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
 .cap-ok{font-size:11px;color:#2E5E2E;font-weight:500;margin-top:2px;display:none}
 .alert{background:#fdf2f2;color:#9b1c1c;padding:10px 14px;border-radius:6px;font-size:12px;font-weight:500;border:1px solid #fbd5d5;margin-top:4px;display:none}
 .alert.show{display:block}
-.letter-card .btn-amber {width: auto; align-self: flex-end;}
 .letter-footer{padding:20px 28px;background:#FAF9F6;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:20px}
 .expiry{font-size:12px;color:var(--muted);flex-grow:1}
 
@@ -98,7 +97,7 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
 
 /* PHYSICAL PRINT DOCUMENT PREVIEW PREVIEW */
 .preview-wrap{max-width:760px;margin:0 auto}
-.pdf-preview{background:var(--white);box-shadow:0 12px 48px rgba(0,0,0,0.06);border:1px solid #BDB4A6;position:relative;min-height:842px}
+.pdf-preview{background:var(--white);box-shadow:0 12px 48px rgba(0,0,0,0.06);border:1px solid #BDB4A6;position:relative;min-height:860px;padding-bottom:60px}
 .pdf-top-bar{height:6px;background:var(--gold)}
 .pdf-header{padding:44px 44px 30px;display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #EDE6DE}
 .pdf-logo-row{display:flex;align-items:center;gap:14px}
@@ -108,7 +107,7 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
 .pdf-nmls{text-align:right;font-size:11px;line-height:1.5;color:var(--muted);font-weight:500}
 .pdf-body{padding:44px 54px;font-size:14px;line-height:1.75;color:#222222;display:flex;flex-direction:column;gap:18px}
 .amount-highlight{display:block;font-size:28px;font-family:'Playfair Display',serif;font-weight:900;color:var(--dark-green);margin:4px 0 12px}
-.pdf-sig{margin-top:40px;line-height:1.4}
+.pdf-sig{margin-top:30px;line-height:1.4}
 .sig-line{width:180px;height:1px;background:var(--ink);margin-bottom:12px}
 .sig-name{font-weight:600;font-size:13px;color:var(--dark-green)}
 .sig-title{font-size:11px;color:var(--muted)}
@@ -137,7 +136,6 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
   <div class="tab" id="tab-preview" onclick="switchTab('preview')">📄 Letter Preview</div>
 </div>
 
-<!-- LO SETUP PANEL -->
 <div id="lo-setup" class="panel active">
   <p class="section-title">Create a borrower link</p>
   <p class="section-sub">Set the caps once. Share the link. Never get that email again.</p>
@@ -170,6 +168,14 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
       <label>Link expires</label>
       <input id="lo-expiry" type="date" value="2026-08-31">
     </div>
+    <div class="field full">
+      <div class="toggle-row" style="background:#fff; padding:4px 0; border:none;">
+        <label class="toggle-control" style="font-size:14px;">
+          <input type="checkbox" id="lo-contingent" style="width:18px; height:18px;">
+          Offer is contingent on sale of home
+        </label>
+      </div>
+    </div>
     <div class="field full" style="margin-top:6px">
       <button class="btn-primary" onclick="generateLink()" style="width:fit-content">Generate borrower link →</button>
     </div>
@@ -183,7 +189,6 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
   </div>
 </div>
 
-<!-- DASHBOARD PANEL -->
 <div id="lo-dashboard" class="panel">
   <p class="section-title">Active letter links</p>
   <p class="section-sub">Every link you've created — who's used it and when it expires.</p>
@@ -194,6 +199,7 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
         <th>Max Amount</th>
         <th>Loan Type</th>
         <th>Concessions Cap</th>
+        <th>Contingent</th>
         <th>Expires</th>
         <th>Status</th>
       </tr>
@@ -204,6 +210,7 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
         <td>$425,000</td>
         <td>Conventional</td>
         <td>6.0% Max</td>
+        <td id="dash-contingent-display">No</td>
         <td>Aug 31, 2026</td>
         <td><span class="pill-active">Active</span></td>
       </tr>
@@ -211,7 +218,6 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
   </table>
 </div>
 
-<!-- BORROWER WORKSPACE PANEL -->
 <div id="borrower" class="panel">
   <div class="borrower-wrap">
     <p class="section-title">Generate your letter</p>
@@ -232,6 +238,12 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
           <div class="borrow-label">Borrower(s)</div>
           <div class="locked-val">🔒 <span id="b-borrower">Sarah &amp; James Morrow</span></div>
         </div>
+        
+        <div id="b-contingent-lock-row" class="borrow-field" style="display:none;">
+          <div class="borrow-label">Required Contingencies</div>
+          <div class="locked-val" style="color:#b22222; background:#fff5f5; border-color:#fbd5d5;">🔒 Offer is contingent on sale of home</div>
+        </div>
+
         <div class="two-col">
           <div class="borrow-field">
             <div class="borrow-label">Loan type</div>
@@ -249,9 +261,8 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
           <div class="alert" id="b-amount-alert">⚠ This exceeds your approved maximum. Please enter a lower amount.</div>
         </div>
         
-        <!-- STREAMLINED SINGLE-ENTRY CONCESSIONS AREA -->
         <div class="borrow-field">
-          <div class="borrow-label">Requested Seller Concessions</div>
+          <div class="borrow-label">Seller Concessions Required</div>
           <div class="toggle-row" style="flex-direction: column; align-items: stretch; gap: 10px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <span style="font-size: 11px; font-weight:700; color: var(--dark-green); text-transform: uppercase;">Offer Parameters</span>
@@ -282,7 +293,6 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
   </div>
 </div>
 
-<!-- PREVIEW PANEL -->
 <div id="preview" class="panel">
   <div class="preview-wrap">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px">
@@ -319,9 +329,10 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
           <span style="display:block; margin-top:6px;"><strong>Pre-Approved Purchase Price (not to exceed):</strong></span>
           <span class="amount-highlight" id="p-amount">$398,000</span>
           
-          <div id="p-con-line" style="margin-top:6px; display:block;"><strong>Seller Concessions Requested:</strong> <span id="p-p-concessions">$0</span></div>
+          <div id="p-con-line" style="margin-top:6px; display:block;"><strong>Seller Concessions Required:</strong> <span id="p-p-concessions">$0</span></div>
         </div>
         <p id="p-address-line"></p>
+        <p id="p-contingent-line" style="font-weight:600; color:#1B3B2B; display:none;"></p>
         <p>This pre-approval is based on information provided at the time of application and is subject to satisfactory appraisal, title review, and final underwriting approval. This letter does not constitute a commitment to lend.</p>
         <p>Please do not hesitate to contact our office with any questions.</p>
         <div class="pdf-sig">
@@ -338,13 +349,13 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
 </div>
 
 <script>
-// Live workspace object configuration bound variables
 let config = {
   borrower: "Sarah & James Morrow",
   maxAmount: 425000,
   loanType: "Conventional",
   maxConPct: 6.0,
-  expiry: "2026-08-31"
+  expiry: "2026-08-31",
+  isContingent: false
 };
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -354,8 +365,8 @@ window.addEventListener('DOMContentLoaded', () => {
   if (urlParams.has('b')) {
     config.borrower = urlParams.get('b');
     config.expiry = urlParams.get('e') || '2026-08-31';
+    config.isContingent = urlParams.get('hc') === 'true';
     
-    // Fall back smoothly to configured input states
     readInputsToConfig();
     document.getElementById('navigation-tabs').classList.add('hide-admin');
     switchTab('borrower');
@@ -371,34 +382,20 @@ function readInputsToConfig() {
   config.maxConPct = parseFloat(document.getElementById('lo-max-concessions-pct').value) || 6.0;
   config.borrower = document.getElementById('lo-borrower').value || "Sarah & James Morrow";
   config.expiry = document.getElementById('lo-expiry').value || "2026-08-31";
+  config.isContingent = document.getElementById('lo-contingent').checked;
 }
 
 function switchTab(name){
   const targetPanels = ['lo-setup','lo-dashboard','borrower','preview'];
   const tabIds = ['tab-lo-setup','tab-lo-dashboard','tab-borrower','tab-preview'];
 
-  // 1. Enforce visual active layout toggle changes across tabs 
   tabIds.forEach((id, idx) => {
     const el = document.getElementById(id);
-    if(el) {
-      if(targetPanels[idx] === name) {
-        el.classList.add('active');
-      } else {
-        el.classList.remove('active');
-      }
-    }
+    if(el) el.classList.toggle('active', targetPanels[idx] === name);
   });
 
-  // 2. Clear out panel blocks and uniquely show target active panel
-  document.querySelectorAll('.panel').forEach(p => {
-    if(p.id === name) {
-      p.classList.add('active');
-    } else {
-      p.classList.remove('active');
-    }
-  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === name));
   
-  // 3. Execution alignment rules
   if(name==='borrower') syncBorrower();
   if(name==='preview') syncPreview();
 }
@@ -407,11 +404,12 @@ function generateLink(){
   readInputsToConfig();
 
   const basePoint = window.location.origin + window.location.pathname;
-  const secureUrl = `${basePoint}?b=${encodeURIComponent(config.borrower)}&e=${config.expiry}`;
+  const secureUrl = `${basePoint}?b=${encodeURIComponent(config.borrower)}&e=${config.expiry}&hc=${config.isContingent}`;
 
   document.getElementById('link-url').textContent = secureUrl;
   document.getElementById('link-box').style.display = 'flex';
   document.getElementById('dash-name-display').textContent = config.borrower;
+  document.getElementById('dash-contingent-display').textContent = config.isContingent ? "Yes" : "No";
 }
 
 function copyLink(){
@@ -427,14 +425,14 @@ function syncBorrower(){
   document.getElementById('b-maxshow').textContent = Number(config.maxAmount).toLocaleString();
   document.getElementById('b-exp-date').textContent = config.expiry;
   document.getElementById('b-setup-max-cap').textContent = config.maxConPct;
-
-  const offerAmt = Number(document.getElementById('b-amount').value) || 0;
   
+  const contRow = document.getElementById('b-contingent-lock-row');
+  if(contRow) contRow.style.display = config.isContingent ? 'block' : 'none';
+
   if(!document.getElementById('b-con-pct').value) {
     document.getElementById('b-con-pct').value = 0;
     document.getElementById('b-con-dollar').value = 0;
   }
-  
   validateOfferLimits();
 }
 
@@ -492,8 +490,6 @@ function generateLetter(){
 }
 
 function syncPreview(){
-  const today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-  document.getElementById('p-date').textContent = today;
   document.getElementById('p-borrower').textContent = config.borrower;
   document.getElementById('p-loantype').textContent = config.loanType;
   
@@ -514,6 +510,14 @@ function syncPreview(){
   
   const addr = document.getElementById('b-address').value;
   document.getElementById('p-address-line').textContent = addr ? 'Subject Property: ' + addr : '';
+
+  const contLine = document.getElementById('p-contingent-line');
+  if(config.isContingent) {
+    contLine.textContent = "* This pre-approval is contingent upon the successful sale and closing of the borrower's current residence.";
+    contLine.style.display = 'block';
+  } else {
+    contLine.style.display = 'none';
+  }
 }
 
 function downloadPDF(){
@@ -537,47 +541,73 @@ function downloadPDF(){
   doc.text('Legendary Service',56,60);
   doc.setFontSize(9);
   doc.text('Eric Nearing, MLO  ·  NMLS #963158',572,38,{align:'right'});
-  doc.text(today,572,52,{align:'right'});
+  doc.text(today,572,52,-12,{align:'right'});
 
-  // Body Layout
+  // Core Dynamic Layout System
   doc.setTextColor(28,35,33);
-  let y=120;const m=44,w=524;
-  const ln=(txt,bold=false,sz=11)=>{
-    doc.setFont('helvetica',bold?'bold':'normal');doc.setFontSize(sz);
-    const lines=doc.splitTextToSize(txt,w);
-    doc.text(lines,m,y);y+=lines.length*16+4;
+  let y = 130; const m = 54, w = 504;
+  
+  const printLine = (text, isBold = false, size = 11, spacingAfter = 16) => {
+    doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+    doc.setFontSize(size);
+    const splitLines = doc.splitTextToSize(text, w);
+    doc.text(splitLines, m, y);
+    y += (splitLines.length * size) + spacingAfter;
   };
-  ln('To Whom It May Concern,');y+=6;
-  ln(`This letter is to confirm that ${config.borrower} has been pre-approved for a mortgage loan under the following terms:`);y+=8;
+
+  printLine('To Whom It May Concern,', false, 11, 12);
+  printLine(`This letter is to confirm that ${config.borrower} has been pre-approved for a mortgage loan under the following terms:`, false, 11, 16);
   
-  ln('Loan Type:',true,10);
-  y-=4;doc.setFont('helvetica','normal');doc.setFontSize(11);doc.text(config.loanType,130,y-12);y+=6;
+  // Highlight Container Parameters
+  doc.setFillColor(250, 249, 246);
+  doc.setDrawColor(209, 199, 189);
   
-  ln('Pre-Approved Purchase Price (not to exceed):',true,10);
-  doc.setFont('helvetica','bold');doc.setFontSize(20);doc.setTextColor(27,59,43);
-  doc.text('$' + amt.toLocaleString(),m,y+4);y+=28;
-  doc.setTextColor(28,35,33);
+  let boxTop = y - 4;
+  let boxHeight = showConcessions ? 100 : 76;
+  doc.rect(m - 10, boxTop, w + 20, boxHeight, 'DF');
+
+  printLine('Loan Type:', true, 10, 2);
+  y -= 12; doc.setFont('helvetica', 'normal'); doc.setFontSize(11); doc.text(config.loanType, m + 70, y); y += 16;
+  
+  printLine('Pre-Approved Purchase Price (not to exceed):', true, 10, 4);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(22); doc.setTextColor(27, 59, 43);
+  doc.text('$' + amt.toLocaleString(), m, y + 6); 
+  y += 32;
+  doc.setTextColor(28, 35, 33);
   
   if(showConcessions) {
-     ln('Seller Concessions Requested:',true,10);
-     y-=4;doc.setFont('helvetica','normal');doc.setFontSize(11);doc.text('$' + conDollar.toLocaleString() + ' (' + conPct + '%)',200,y-12);y+=10;
+     printLine('Seller Concessions Required:', true, 10, 2);
+     y -= 12; doc.setFont('helvetica', 'normal'); doc.setFontSize(11); doc.text('$' + conDollar.toLocaleString() + ' (' + conPct + '%)', m + 145, y); y += 18;
   }
   
-  if(address){ln('Subject Property: '+address);y+=4;}
-  ln('This pre-approval is based on information provided at the time of application and is subject to satisfactory appraisal, title review, and final underwriting approval. This letter does not constitute a commitment to lend.');
-  y+=8;ln('Please do not hesitate to contact our office with any questions.');
-  y+=36;
-  doc.setDrawColor(28,35,33);doc.line(m,y,m+190,y);y+=13;
-  ln('Eric Nearing',true,11);
-  ln('Mortgage Loan Officer · NMLS #963158',false,10);
-  ln('Bigfoot Mortgage · Tennessee',false,10);
+  y += 10; // Pad out past the box bounds smoothly
+
+  if(address){
+     printLine('Subject Property: ' + address, true, 11, 12);
+  }
   
-  // Footer System
+  if(config.isContingent) {
+     doc.setTextColor(27, 59, 43);
+     printLine(`* This pre-approval is contingent upon the successful sale and closing of the borrower's current residence.`, true, 10, 14);
+     doc.setTextColor(28, 35, 33);
+  }
+
+  printLine('This pre-approval is based on information provided at the time of application and is subject to satisfactory appraisal, title review, and final underwriting approval. This letter does not constitute a commitment to lend.', false, 11, 14);
+  printLine('Please do not hesitate to contact our office with any questions.', false, 11, 40);
+  
+  // Dynamic Signature Generation Placement Boundaries
+  doc.setDrawColor(28, 35, 33); doc.line(m, y, m + 180, y); y += 14;
+  printLine('Eric Nearing', true, 11, 2);
+  printLine('Mortgage Loan Officer · NMLS #963158', false, 10, 2);
+  printLine('Bigfoot Mortgage · Tennessee', false, 10, 2);
+  
+  // Bottom Fixed Border Accent Bars
   doc.setFillColor(212,163,115);doc.rect(0,751,612,4,'F');
   doc.setFillColor(27,59,43);doc.rect(0,755,612,37,'F');
   doc.setTextColor(255,255,255,0.6);doc.setFontSize(8);doc.setFont('helvetica','normal');
   doc.text('letters.bigfootmortgage.com',m,776);
   doc.text('NMLS #963158 · Licensed in Tennessee',572,776,{align:'right'});
+  
   doc.save(`bigfoot-preapproval-${config.borrower.toLowerCase().replace(/[^a-z0-9]/g,'-')}.pdf`);
 }
 </script>
