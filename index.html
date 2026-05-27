@@ -87,7 +87,8 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
 .cap-ok{font-size:11px;color:#2E5E2E;font-weight:500;margin-top:2px;display:none}
 .alert{background:#fdf2f2;color:#9b1c1c;padding:10px 14px;border-radius:6px;font-size:12px;font-weight:500;border:1px solid #fbd5d5;margin-top:4px;display:none}
 .alert.show{display:block}
-.letter-footer{padding:20px 28px;background:#FAF9F6;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:between;gap:20px}
+.letter-card .btn-amber {width: auto; align-self: flex-end;}
+.letter-footer{padding:20px 28px;background:#FAF9F6;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:20px}
 .expiry{font-size:12px;color:var(--muted);flex-grow:1}
 
 /* SINGLE BOX INTERACTIVE TOGGLES */
@@ -136,6 +137,7 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
   <div class="tab" id="tab-preview" onclick="switchTab('preview')">📄 Letter Preview</div>
 </div>
 
+<!-- LO SETUP PANEL -->
 <div id="lo-setup" class="panel active">
   <p class="section-title">Create a borrower link</p>
   <p class="section-sub">Set the caps once. Share the link. Never get that email again.</p>
@@ -168,4 +170,416 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
       <label>Link expires</label>
       <input id="lo-expiry" type="date" value="2026-08-31">
     </div>
-    <div class="
+    <div class="field full" style="margin-top:6px">
+      <button class="btn-primary" onclick="generateLink()" style="width:fit-content">Generate borrower link →</button>
+    </div>
+  </div>
+  <div class="link-box" id="link-box" style="display:none">
+    <div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px">Send this to your borrower or their realtor</div>
+      <div class="link-url" id="link-url"></div>
+    </div>
+    <button class="copy-btn" id="copy-btn" onclick="copyLink()">Copy</button>
+  </div>
+</div>
+
+<!-- DASHBOARD PANEL -->
+<div id="lo-dashboard" class="panel">
+  <p class="section-title">Active letter links</p>
+  <p class="section-sub">Every link you've created — who's used it and when it expires.</p>
+  <table class="lo-table">
+    <thead>
+      <tr>
+        <th>Borrower</th>
+        <th>Max Amount</th>
+        <th>Loan Type</th>
+        <th>Concessions Cap</th>
+        <th>Expires</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong id="dash-name-display">Sarah &amp; James Morrow</strong></td>
+        <td>$425,000</td>
+        <td>Conventional</td>
+        <td>6.0% Max</td>
+        <td>Aug 31, 2026</td>
+        <td><span class="pill-active">Active</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- BORROWER WORKSPACE PANEL -->
+<div id="borrower" class="panel">
+  <div class="borrower-wrap">
+    <p class="section-title">Generate your letter</p>
+    <p class="section-sub">Enter your offer details — your lender has set the approved limits.</p>
+    <div class="letter-card">
+      <div class="letter-header">
+        <div class="lh-left">
+          <div class="lh-icon">🦶</div>
+          <div>
+            <div class="lender-name">Bigfoot Mortgage</div>
+            <div class="lender-sub">Eric Nearing · NMLS #963158 · Tennessee</div>
+          </div>
+        </div>
+        <div class="nmls-badge">PRE-APPROVAL<br>LETTER PORTAL</div>
+      </div>
+      <div class="letter-body">
+        <div class="borrow-field">
+          <div class="borrow-label">Borrower(s)</div>
+          <div class="locked-val">🔒 <span id="b-borrower">Sarah &amp; James Morrow</span></div>
+        </div>
+        <div class="two-col">
+          <div class="borrow-field">
+            <div class="borrow-label">Loan type</div>
+            <div class="locked-val">🔒 <span id="b-loantype">Conventional</span></div>
+          </div>
+          <div class="borrow-field">
+            <div class="borrow-label">Property address <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></div>
+            <input class="editable-val" id="b-address" type="text" placeholder="123 Oak St, Knoxville TN" style="font-size:13px;font-weight:400;border-color:var(--border)">
+          </div>
+        </div>
+        <div class="borrow-field">
+          <div class="borrow-label">Offer amount</div>
+          <input class="editable-val" id="b-amount" type="number" placeholder="Enter offer amount" value="398000" oninput="handleOfferAmountChange()">
+          <div class="cap-ok" id="b-amount-cap">✓ Within approved limit of $<span id="b-maxshow">425,000</span></div>
+          <div class="alert" id="b-amount-alert">⚠ This exceeds your approved maximum. Please enter a lower amount.</div>
+        </div>
+        
+        <!-- STREAMLINED SINGLE-ENTRY CONCESSIONS AREA -->
+        <div class="borrow-field">
+          <div class="borrow-label">Requested Seller Concessions</div>
+          <div class="toggle-row" style="flex-direction: column; align-items: stretch; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 11px; font-weight:700; color: var(--dark-green); text-transform: uppercase;">Offer Parameters</span>
+              <label class="toggle-control">
+                <input type="checkbox" id="show-concessions-checkbox" checked onchange="syncPreview()"> Include on Letter
+              </label>
+            </div>
+            <div class="two-col">
+              <div>
+                <label style="font-size: 9px; color: var(--muted); font-weight:600;">Dollar Amount ($)</label>
+                <input class="editable-val" style="padding: 8px 12px; font-size: 14px;" type="number" id="b-con-dollar" oninput="convertConcession('dollar')">
+              </div>
+              <div>
+                <label style="font-size: 9px; color: var(--muted); font-weight:600;">Percentage (%)</label>
+                <input class="editable-val" style="padding: 8px 12px; font-size: 14px;" type="number" step="0.1" id="b-con-pct" oninput="convertConcession('pct')">
+              </div>
+            </div>
+            <div class="hint">Lender Cap Ceiling Allowed: <span id="b-setup-max-cap">6.0</span>%</div>
+          </div>
+          <div class="alert" id="b-concession-alert">⚠ Requested concessions exceed the max limits parameters set by your lender. Capping inputs to max bounds.</div>
+        </div>
+      </div>
+      <div class="letter-footer">
+        <div class="expiry">Link expires: <strong id="b-exp-date">Aug 31, 2026</strong></div>
+        <button class="btn-amber" onclick="generateLetter()">Generate letter →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PREVIEW PANEL -->
+<div id="preview" class="panel">
+  <div class="preview-wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+      <div>
+        <p class="section-title">Your letter is ready</p>
+        <p class="section-sub">Review below, then download.</p>
+      </div>
+      <div style="display:flex; gap:8px;">
+         <button class="copy-btn" id="back-to-edit-btn" onclick="switchTab('borrower')" style="background:var(--dark-green); color:white; border-color:var(--dark-green);">← Adjust Form</button>
+         <button class="btn-primary" onclick="downloadPDF()">⬇ Download PDF</button>
+      </div>
+    </div>
+    <div class="pdf-preview">
+      <div class="pdf-top-bar"></div>
+      <div class="pdf-header">
+        <div class="pdf-logo-row">
+          <div class="pdf-icon">🦶</div>
+          <div>
+            <div class="pdf-lender">Bigfoot Mortgage</div>
+            <div class="pdf-lender-sub">Legendary Service</div>
+          </div>
+        </div>
+        <div class="pdf-nmls">
+          Eric Nearing, MLO<br>
+          NMLS #963158<br>
+          <span id="p-date"></span>
+        </div>
+      </div>
+      <div class="pdf-body">
+        <p>To Whom It May Concern,</p>
+        <p>This letter is to confirm that <strong id="p-borrower">Sarah &amp; James Morrow</strong> has been pre-approved for a mortgage loan under the following terms:</p>
+        <div style="background:#FAF9F6; padding:18px; border-radius:8px; border:1px solid var(--border); margin-bottom:10px;">
+          <strong>Loan Type:</strong> <span id="p-loantype">Conventional</span><br>
+          <span style="display:block; margin-top:6px;"><strong>Pre-Approved Purchase Price (not to exceed):</strong></span>
+          <span class="amount-highlight" id="p-amount">$398,000</span>
+          
+          <div id="p-con-line" style="margin-top:6px; display:block;"><strong>Seller Concessions Requested:</strong> <span id="p-p-concessions">$0</span></div>
+        </div>
+        <p id="p-address-line"></p>
+        <p>This pre-approval is based on information provided at the time of application and is subject to satisfactory appraisal, title review, and final underwriting approval. This letter does not constitute a commitment to lend.</p>
+        <p>Please do not hesitate to contact our office with any questions.</p>
+        <div class="pdf-sig">
+          <div class="sig-line"></div>
+          <div class="sig-name">Eric Nearing</div>
+          <div class="sig-title">Mortgage Loan Officer · NMLS #963158</div>
+          <div class="sig-title">Bigfoot Mortgage · Tennessee</div>
+          <div class="sig-title" style="margin-top:6px;font-size:10px;color:#ccc">letters.bigfootmortgage.com</div>
+        </div>
+      </div>
+      <div class="pdf-footer-bar"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Live workspace object configuration bound variables
+let config = {
+  borrower: "Sarah & James Morrow",
+  maxAmount: 425000,
+  loanType: "Conventional",
+  maxConPct: 6.0,
+  expiry: "2026-08-31"
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  document.getElementById('p-date').textContent = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  
+  if (urlParams.has('b')) {
+    config.borrower = urlParams.get('b');
+    config.expiry = urlParams.get('e') || '2026-08-31';
+    
+    // Fall back smoothly to configured input states
+    readInputsToConfig();
+    document.getElementById('navigation-tabs').classList.add('hide-admin');
+    switchTab('borrower');
+  } else {
+    readInputsToConfig();
+    switchTab('lo-setup');
+  }
+});
+
+function readInputsToConfig() {
+  config.maxAmount = Number(document.getElementById('lo-max').value) || 425000;
+  config.loanType = document.getElementById('lo-loantype').value || 'Conventional';
+  config.maxConPct = parseFloat(document.getElementById('lo-max-concessions-pct').value) || 6.0;
+  config.borrower = document.getElementById('lo-borrower').value || "Sarah & James Morrow";
+  config.expiry = document.getElementById('lo-expiry').value || "2026-08-31";
+}
+
+function switchTab(name){
+  const targetPanels = ['lo-setup','lo-dashboard','borrower','preview'];
+  const tabIds = ['tab-lo-setup','tab-lo-dashboard','tab-borrower','tab-preview'];
+
+  // 1. Enforce visual active layout toggle changes across tabs 
+  tabIds.forEach((id, idx) => {
+    const el = document.getElementById(id);
+    if(el) {
+      if(targetPanels[idx] === name) {
+        el.classList.add('active');
+      } else {
+        el.classList.remove('active');
+      }
+    }
+  });
+
+  // 2. Clear out panel blocks and uniquely show target active panel
+  document.querySelectorAll('.panel').forEach(p => {
+    if(p.id === name) {
+      p.classList.add('active');
+    } else {
+      p.classList.remove('active');
+    }
+  });
+  
+  // 3. Execution alignment rules
+  if(name==='borrower') syncBorrower();
+  if(name==='preview') syncPreview();
+}
+
+function generateLink(){
+  readInputsToConfig();
+
+  const basePoint = window.location.origin + window.location.pathname;
+  const secureUrl = `${basePoint}?b=${encodeURIComponent(config.borrower)}&e=${config.expiry}`;
+
+  document.getElementById('link-url').textContent = secureUrl;
+  document.getElementById('link-box').style.display = 'flex';
+  document.getElementById('dash-name-display').textContent = config.borrower;
+}
+
+function copyLink(){
+  navigator.clipboard.writeText(document.getElementById('link-url').textContent).catch(()=>{});
+  const b=document.getElementById('copy-btn');
+  b.textContent='Copied!';b.classList.add('copied');
+  setTimeout(()=>{b.textContent='Copy';b.classList.remove('copied')},2000);
+}
+
+function syncBorrower(){
+  document.getElementById('b-borrower').textContent = config.borrower;
+  document.getElementById('b-loantype').textContent = config.loanType;
+  document.getElementById('b-maxshow').textContent = Number(config.maxAmount).toLocaleString();
+  document.getElementById('b-exp-date').textContent = config.expiry;
+  document.getElementById('b-setup-max-cap').textContent = config.maxConPct;
+
+  const offerAmt = Number(document.getElementById('b-amount').value) || 0;
+  
+  if(!document.getElementById('b-con-pct').value) {
+    document.getElementById('b-con-pct').value = 0;
+    document.getElementById('b-con-dollar').value = 0;
+  }
+  
+  validateOfferLimits();
+}
+
+function handleOfferAmountChange() {
+  validateOfferLimits();
+  const amt = Number(document.getElementById('b-amount').value) || 0;
+  const conPct = Number(document.getElementById('b-con-pct').value) || 0;
+  document.getElementById('b-con-dollar').value = Math.round(amt * (conPct / 100));
+}
+
+function validateOfferLimits() {
+  const val = Number(document.getElementById('b-amount').value) || 0;
+  const max = Number(config.maxAmount);
+  document.getElementById('b-amount-cap').style.display = (val > 0 && val <= max) ? 'block' : 'none';
+  document.getElementById('b-amount-alert').classList.toggle('show', val > max);
+}
+
+function convertConcession(sourceField) {
+  const amt = Number(document.getElementById('b-amount').value) || 0;
+  const alertBanner = document.getElementById('b-concession-alert');
+  alertBanner.classList.remove('show');
+
+  if(amt <= 0) return;
+
+  let pctVal = 0;
+  if(sourceField === 'dollar') {
+    const dollarVal = Number(document.getElementById('b-con-dollar').value) || 0;
+    pctVal = (dollarVal / amt) * 100;
+  } else {
+    pctVal = Number(document.getElementById('b-con-pct').value) || 0;
+  }
+
+  if (pctVal < 0 || pctVal > config.maxConPct) {
+    alertBanner.classList.add('show');
+    pctVal = (pctVal < 0) ? 0 : config.maxConPct;
+  }
+
+  if(sourceField === 'dollar') {
+    document.getElementById('b-con-pct').value = parseFloat(pctVal.toFixed(2));
+  } else {
+    document.getElementById('b-con-dollar').value = Math.round(amt * (pctVal / 100));
+  }
+  syncPreview();
+}
+
+function generateLetter(){
+  const amt = Number(document.getElementById('b-amount').value);
+  const maxA = Number(config.maxAmount);
+  if(amt <= 0 || amt > maxA){
+     alert('Please input a valid offer amount underneath your approved bounds.');
+     return;
+  }
+  syncPreview();
+  switchTab('preview');
+}
+
+function syncPreview(){
+  const today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('p-date').textContent = today;
+  document.getElementById('p-borrower').textContent = config.borrower;
+  document.getElementById('p-loantype').textContent = config.loanType;
+  
+  const amt = Number(document.getElementById('b-amount').value) || 0;
+  document.getElementById('p-amount').textContent = '$' + amt.toLocaleString();
+  
+  const conDollar = Number(document.getElementById('b-con-dollar').value) || 0;
+  const conPct = Number(document.getElementById('b-con-pct').value) || 0;
+  const showConcessions = document.getElementById('show-concessions-checkbox').checked;
+  const conLine = document.getElementById('p-con-line');
+  
+  if(showConcessions) {
+    conLine.style.display = 'block';
+    document.getElementById('p-p-concessions').textContent = '$' + conDollar.toLocaleString() + ' (' + conPct + '%)';
+  } else {
+    conLine.style.display = 'none';
+  }
+  
+  const addr = document.getElementById('b-address').value;
+  document.getElementById('p-address-line').textContent = addr ? 'Subject Property: ' + addr : '';
+}
+
+function downloadPDF(){
+  const {jsPDF} = window.jspdf;
+  const doc = new jsPDF({unit:'pt',format:'letter'});
+  
+  const amt = Number(document.getElementById('b-amount').value) || 0;
+  const conDollar = Number(document.getElementById('b-con-dollar').value) || 0;
+  const conPct = Number(document.getElementById('b-con-pct').value) || 0;
+  const showConcessions = document.getElementById('show-concessions-checkbox').checked;
+  const address = document.getElementById('b-address').value;
+  const today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  // Header System
+  doc.setFillColor(212,163,115);doc.rect(0,0,612,5,'F');
+  doc.setFillColor(27,59,43);doc.rect(0,5,612,85,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(22);doc.setFont('times','bold');
+  doc.text('Bigfoot Mortgage',56,44);
+  doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setFillColor(233,216,166);
+  doc.text('Legendary Service',56,60);
+  doc.setFontSize(9);
+  doc.text('Eric Nearing, MLO  ·  NMLS #963158',572,38,{align:'right'});
+  doc.text(today,572,52,{align:'right'});
+
+  // Body Layout
+  doc.setTextColor(28,35,33);
+  let y=120;const m=44,w=524;
+  const ln=(txt,bold=false,sz=11)=>{
+    doc.setFont('helvetica',bold?'bold':'normal');doc.setFontSize(sz);
+    const lines=doc.splitTextToSize(txt,w);
+    doc.text(lines,m,y);y+=lines.length*16+4;
+  };
+  ln('To Whom It May Concern,');y+=6;
+  ln(`This letter is to confirm that ${config.borrower} has been pre-approved for a mortgage loan under the following terms:`);y+=8;
+  
+  ln('Loan Type:',true,10);
+  y-=4;doc.setFont('helvetica','normal');doc.setFontSize(11);doc.text(config.loanType,130,y-12);y+=6;
+  
+  ln('Pre-Approved Purchase Price (not to exceed):',true,10);
+  doc.setFont('helvetica','bold');doc.setFontSize(20);doc.setTextColor(27,59,43);
+  doc.text('$' + amt.toLocaleString(),m,y+4);y+=28;
+  doc.setTextColor(28,35,33);
+  
+  if(showConcessions) {
+     ln('Seller Concessions Requested:',true,10);
+     y-=4;doc.setFont('helvetica','normal');doc.setFontSize(11);doc.text('$' + conDollar.toLocaleString() + ' (' + conPct + '%)',200,y-12);y+=10;
+  }
+  
+  if(address){ln('Subject Property: '+address);y+=4;}
+  ln('This pre-approval is based on information provided at the time of application and is subject to satisfactory appraisal, title review, and final underwriting approval. This letter does not constitute a commitment to lend.');
+  y+=8;ln('Please do not hesitate to contact our office with any questions.');
+  y+=36;
+  doc.setDrawColor(28,35,33);doc.line(m,y,m+190,y);y+=13;
+  ln('Eric Nearing',true,11);
+  ln('Mortgage Loan Officer · NMLS #963158',false,10);
+  ln('Bigfoot Mortgage · Tennessee',false,10);
+  
+  // Footer System
+  doc.setFillColor(212,163,115);doc.rect(0,751,612,4,'F');
+  doc.setFillColor(27,59,43);doc.rect(0,755,612,37,'F');
+  doc.setTextColor(255,255,255,0.6);doc.setFontSize(8);doc.setFont('helvetica','normal');
+  doc.text('letters.bigfootmortgage.com',m,776);
+  doc.text('NMLS #963158 · Licensed in Tennessee',572,776,{align:'right'});
+  doc.save(`bigfoot-preapproval-${config.borrower.toLowerCase().replace(/[^a-z0-9]/g,'-')}.pdf`);
+}
+</script>
+</body>
+</html>
