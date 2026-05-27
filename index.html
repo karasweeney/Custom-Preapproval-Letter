@@ -30,8 +30,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--tan);color:var(--ink);min
 .tab{padding:16px 20px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;display:flex;align-items:center;gap:6px}
 .tab:hover{color:var(--dark-green);background:#faf9f6}
 .tab.active{color:var(--dark-green);border-bottom-color:var(--dark-green)}
-.tabs.admin-mode .tab{display:flex}
-.tabs:not(.admin-mode) #tab-lo-setup, .tabs:not(.admin-mode) #tab-lo-dashboard{display:none!important}
+.tabs.hide-admin #tab-lo-setup, .tabs.hide-admin #tab-lo-dashboard {display:none!important}
 
 /* CORE INTERFACE PANELS */
 .panel{display:none;max-width:1020px;margin:0 auto;padding:40px 28px;animation:fadeIn .2s ease-out}
@@ -126,11 +125,11 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
     </div>
   </div>
   <div class="nav-right">
-    <div class="nav-pill">Eric Nearing · NMLS #1884</div>
+    <div class="nav-pill">Eric Nearing · NMLS #963158</div>
   </div>
 </div>
 
-<div id="navigation-tabs" class="tabs admin-mode">
+<div id="navigation-tabs" class="tabs">
   <div class="tab active" id="tab-lo-setup" onclick="switchTab('lo-setup')">🔧 LO Setup</div>
   <div class="tab" id="tab-lo-dashboard" onclick="switchTab('lo-dashboard')">📋 My Letters</div>
   <div class="tab" id="tab-borrower" onclick="switchTab('borrower')">🏠 Borrower View</div>
@@ -169,147 +168,4 @@ input:focus,select:focus{outline:none;border-color:var(--dark-green);box-shadow:
       <label>Link expires</label>
       <input id="lo-expiry" type="date" value="2026-08-31">
     </div>
-    <div class="field full" style="margin-top:6px">
-      <button class="btn-primary" onclick="generateLink()" style="width:fit-content">Generate borrower link →</button>
-    </div>
-  </div>
-  <div class="link-box" id="link-box" style="display:none">
-    <div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px">Send this to your borrower or their realtor</div>
-      <div class="link-url" id="link-url"></div>
-    </div>
-    <button class="copy-btn" id="copy-btn" onclick="copyLink()">Copy</button>
-  </div>
-</div>
-
-<div id="lo-dashboard" class="panel">
-  <p class="section-title">Active letter links</p>
-  <p class="section-sub">Every link you've created — who's used it and when it expires.</p>
-  <table class="lo-table">
-    <thead>
-      <tr>
-        <th>Borrower</th>
-        <th>Max Amount</th>
-        <th>Loan Type</th>
-        <th>Concessions Cap</th>
-        <th>Expires</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong id="dash-name-display">Sarah &amp; James Morrow</strong></td>
-        <td>$425,000</td>
-        <td>Conventional</td>
-        <td>6.0% Max</td>
-        <td>Aug 31, 2026</td>
-        <td><span class="pill-active">Active</span></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div id="borrower" class="panel">
-  <div class="borrower-wrap">
-    <p class="section-title">Generate your letter</p>
-    <p class="section-sub">Enter your offer details — your lender has set the approved limits.</p>
-    <div class="letter-card">
-      <div class="letter-header">
-        <div class="lh-left">
-          <div class="lh-icon">🦶</div>
-          <div>
-            <div class="lender-name">Bigfoot Mortgage</div>
-            <div class="lender-sub">Eric Nearing · NMLS #1884 · Tennessee</div>
-          </div>
-        </div>
-        <div class="nmls-badge">PRE-APPROVAL<br>LETTER PORTAL</div>
-      </div>
-      <div class="letter-body">
-        <div class="borrow-field">
-          <div class="borrow-label">Borrower(s)</div>
-          <div class="locked-val">🔒 <span id="b-borrower">Sarah &amp; James Morrow</span></div>
-        </div>
-        <div class="two-col">
-          <div class="borrow-field">
-            <div class="borrow-label">Loan type</div>
-            <div class="locked-val">🔒 <span id="b-loantype">Conventional</span></div>
-          </div>
-          <div class="borrow-field">
-            <div class="borrow-label">Property address <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></div>
-            <input class="editable-val" id="b-address" type="text" placeholder="123 Oak St, Knoxville TN" style="font-size:13px;font-weight:400;border-color:var(--border)">
-          </div>
-        </div>
-        <div class="borrow-field">
-          <div class="borrow-label">Offer amount</div>
-          <input class="editable-val" id="b-amount" type="number" placeholder="Enter offer amount" value="398000" oninput="handleOfferAmountChange()">
-          <div class="cap-ok" id="b-amount-cap">✓ Within approved limit of $<span id="b-maxshow">425,000</span></div>
-          <div class="alert" id="b-amount-alert">⚠ This exceeds your approved maximum. Please enter a lower amount.</div>
-        </div>
-        
-        <div class="borrow-field">
-          <div class="borrow-label">Requested Seller Concessions</div>
-          <div class="toggle-row" style="flex-direction: column; align-items: stretch; gap: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 11px; font-weight:700; color: var(--dark-green); text-transform: uppercase;">Offer Parameters</span>
-              <label class="toggle-control">
-                <input type="checkbox" id="show-concessions-checkbox" checked onchange="syncPreview()"> Include on Letter
-              </label>
-            </div>
-            <div class="two-col">
-              <div>
-                <label style="font-size: 9px; color: var(--muted); font-weight:600;">Dollar Amount ($)</label>
-                <input class="editable-val" style="padding: 8px 12px; font-size: 14px;" type="number" id="b-con-dollar" oninput="convertConcession('dollar')">
-              </div>
-              <div>
-                <label style="font-size: 9px; color: var(--muted); font-weight:600;">Percentage (%)</label>
-                <input class="editable-val" style="padding: 8px 12px; font-size: 14px;" type="number" step="0.1" id="b-con-pct" oninput="convertConcession('pct')">
-              </div>
-            </div>
-            <div class="hint">Lender Cap Ceiling Allowed: <span id="b-setup-max-cap">6.0</span>%</div>
-          </div>
-          <div class="alert" id="b-concession-alert">⚠ Requested concessions exceed the max limits parameters set by your lender. Capping inputs to max bounds.</div>
-        </div>
-      </div>
-      <div class="letter-footer">
-        <div class="expiry">Link expires: <strong id="b-exp-date">Aug 31, 2026</strong></div>
-        <button class="btn-amber" onclick="generateLetter()">Generate letter →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="preview" class="panel">
-  <div class="preview-wrap">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px">
-      <div>
-        <p class="section-title">Your letter is ready</p>
-        <p class="section-sub">Review below, then download.</p>
-      </div>
-      <div style="display:flex; gap:8px;">
-         <button class="copy-btn" id="back-to-edit-btn" onclick="switchTab('borrower')" style="background:var(--dark-green); color:white; border-color:var(--dark-green);">← Adjust Form</button>
-         <button class="btn-primary" onclick="downloadPDF()">⬇ Download PDF</button>
-      </div>
-    </div>
-    <div class="pdf-preview">
-      <div class="pdf-top-bar"></div>
-      <div class="pdf-header">
-        <div class="pdf-logo-row">
-          <div class="pdf-icon">🦶</div>
-          <div>
-            <div class="pdf-lender">Bigfoot Mortgage</div>
-            <div class="pdf-lender-sub">Legendary Service</div>
-          </div>
-        </div>
-        <div class="pdf-nmls">
-          Eric Nearing, MLO<br>
-          NMLS #1884<br>
-          <span id="p-date"></span>
-        </div>
-      </div>
-      <div class="pdf-body">
-        <p>To Whom It May Concern,</p>
-        <p>This letter is to confirm that <strong id="p-borrower">Sarah &amp; James Morrow</strong> has been pre-approved for a mortgage loan under the following terms:</p>
-        <div style="background:#FAF9F6; padding:18px; border-radius:8px; border:1px solid var(--border); margin-bottom:10px;">
-          <strong>Loan Type:</strong> <span id="p-loantype">Conventional</span><br>
-          <span style="display:block; margin-top:6px;"><strong>Pre-Approved Purchase Price (not to exceed):</strong></span>
-          <span class="amount-highlight
+    <div class="
