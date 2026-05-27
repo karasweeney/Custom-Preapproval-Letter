@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght=700;900&family=DM+Sans:wght=300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -21,109 +21,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--tan);color:var(--ink);min
 .nav-left{display:flex;align-items:center;gap:14px}
 .bigfoot-icon{width:42px;height:42px;background:var(--amber);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .logo{font-family:'Playfair Display',serif;font-size:19px;color:var(--white);letter-spacing:-.2px;line-height:1.15}
-.logo-sub{font-size:10px;color:rgba(255,255,255,0.45);letter-spacing:1.8px;text-transform:uppercase;margin-top:1px}
-.nav-right{display:flex;align-items:center;gap:6px}
-.nav-pill{font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:.5px;background:rgba(255,255,255,0.07);border-radius:20px;padding:5px 12px}
-
-/* TABS */
-.tabs{display:none;border-bottom:1.5px solid var(--border);background:var(--white);padding:0 28px;gap:0}
-.tabs.admin-mode{display:flex}
-.tab{padding:13px 20px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:all .2s;letter-spacing:.2px}
-.tab.active{color:var(--brown);border-bottom-color:var(--amber)}
-.tab:hover:not(.active){color:var(--ink)}
-
-/* PANELS */
-.panel{display:none;padding:28px}
-.panel.active{display:block}
-
-.section-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--brown);margin-bottom:5px}
-.section-sub{font-size:14px;color:var(--muted);margin-bottom:24px}
-
-/* LO SETUP */
-.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:760px}
-.field{display:flex;flex-direction:column;gap:5px}
-.field.full{grid-column:1/-1}
-label{font-size:11px;font-weight:600;color:var(--brown);letter-spacing:.9px;text-transform:uppercase}
-input,select{border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:var(--white);outline:none;transition:border-color .2s}
-input:focus,select:focus{border-color:var(--amber)}
-.hint{font-size:11px;color:var(--muted);margin-top:2px}
-
-.btn-primary{background:var(--brown);color:white;border:none;border-radius:8px;padding:12px 22px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s;letter-spacing:.2px}
-.btn-primary:hover{background:var(--brown-light)}
-.btn-amber{background:var(--amber);color:white;border:none;border-radius:8px;padding:12px 22px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s}
-.btn-amber:hover{background:var(--amber-light)}
-
-.link-box{background:var(--brown-dim);border-radius:10px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:22px;max-width:760px}
-.link-url{font-family:monospace;font-size:13px;color:#d4a96a;word-break:break-all}
-.copy-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:6px;padding:7px 14px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:background .2s}
-.copy-btn:hover{background:rgba(255,255,255,0.2)}
-.copied{background:var(--green)!important}
-
-/* DASHBOARD TABLE */
-.lo-table{width:100%;border-collapse:collapse;max-width:760px;margin-top:22px;background:white;border-radius:10px;overflow:hidden;border:1.5px solid var(--border)}
-.lo-table th{background:var(--brown);color:white;font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;padding:11px 16px;text-align:left}
-.lo-table td{padding:11px 16px;font-size:13px;border-bottom:1px solid var(--border);color:var(--ink)}
-.lo-table tr:last-child td{border-bottom:none}
-.lo-table tr:hover td{background:#faf7f3}
-.pill-active{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:#d1fae5;color:#065f46}
-.pill-expired{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:#fee2e2;color:#991b1b}
-
-/* BORROWER CARD */
-.borrower-wrap{max-width:540px;margin:0 auto}
-.letter-card{background:white;border-radius:14px;border:1.5px solid var(--border);overflow:hidden;box-shadow:0 4px 28px rgba(61,43,31,0.10)}
-.letter-header{background:var(--brown);padding:22px 26px;display:flex;justify-content:space-between;align-items:flex-start}
-.lh-left{display:flex;align-items:center;gap:12px}
-.lh-icon{width:38px;height:38px;background:var(--amber);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.lender-name{font-family:'Playfair Display',serif;font-size:18px;color:white;line-height:1.2}
-.lender-sub{font-size:10px;color:rgba(255,255,255,0.55);margin-top:3px;letter-spacing:.4px}
-.nmls-badge{background:rgba(255,255,255,0.1);border-radius:6px;padding:5px 10px;font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:.4px;text-align:right;line-height:1.5}
-
-.letter-body{padding:22px 26px;display:flex;flex-direction:column;gap:16px}
-.borrow-field{display:flex;flex-direction:column;gap:5px}
-.borrow-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--brown)}
-.locked-val{background:var(--tan);border:1.5px solid var(--border);border-radius:7px;padding:9px 13px;font-size:14px;color:var(--muted);display:flex;align-items:center;gap:8px}
-.editable-val{border:1.5px solid var(--amber);border-radius:7px;padding:9px 13px;font-size:15px;font-weight:600;color:var(--brown);background:white;outline:none;font-family:'DM Sans',sans-serif;width:100%;transition:box-shadow .2s}
-.editable-val:focus{box-shadow:0 0 0 3px rgba(196,123,43,0.15)}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.cap-ok{font-size:11px;color:var(--green);margin-top:2px;font-weight:500}
-.alert{background:#fff3cd;border:1.5px solid #ffc107;border-radius:7px;padding:9px 13px;font-size:12px;color:#856404;margin-top:4px;display:none}
-.alert.show{display:block}
-.letter-footer{padding:14px 26px;border-top:1.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--tan)}
-.expiry{font-size:12px;color:var(--muted)}
-
-/* TOGGLE CHECKS STYLE */
-.toggle-row { display: flex; align-items: center; justify-content: space-between; background: #faf7f3; border: 1px dashed var(--border); padding: 8px 12px; border-radius: 6px; margin-top: 4px; }
-.toggle-control { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink); font-weight: 500; cursor: pointer; }
-.toggle-control input { width: 16px; height: 16px; cursor: pointer; accent-color: var(--amber); }
-
-/* PDF PREVIEW */
-.preview-wrap{max-width:660px;margin:0 auto}
-.pdf-preview{background:white;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 8px 40px rgba(61,43,31,0.12)}
-.pdf-top-bar{background:var(--amber);height:5px}
-.pdf-header{background:var(--brown);padding:30px 40px;display:flex;justify-content:space-between;align-items:flex-start}
-.pdf-logo-row{display:flex;align-items:center;gap:12px}
-.pdf-icon{width:42px;height:42px;background:var(--amber);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px}
-.pdf-lender{font-family:'Playfair Display',serif;font-size:22px;color:white}
-.pdf-lender-sub{font-size:11px;color:rgba(255,255,255,0.55);margin-top:3px}
-.pdf-nmls{text-align:right;font-size:11px;color:rgba(255,255,255,0.55);line-height:1.7}
-.pdf-body{padding:34px 40px;font-size:14px;line-height:1.8;color:var(--ink)}
-.pdf-body p{margin-bottom:14px}
-.amount-highlight{font-family:'Playfair Display',serif;font-size:26px;color:var(--brown);display:block;margin:6px 0}
-.pdf-sig{margin-top:28px;padding-top:22px;border-top:1.5px solid var(--border)}
-.sig-line{width:180px;height:1.5px;background:var(--ink);margin:26px 0 7px}
-.sig-name{font-weight:600;font-size:13px}
-.sig-title{font-size:12px;color:var(--muted)}
-.pdf-footer-bar{background:var(--amber);height:5px}
-</style>
-</head>
-<body>
-
-<div class="nav">
-  <div class="nav-left">
-    <div class="bigfoot-icon">🦶</div>
-    <div>
-      <div class="logo">Bigfoot Mortgage</div>
-      <div class="logo-sub">Pre-Approval Letter Portal</div>
+.logo-sub">Pre-Approval Letter Portal</div>
     </div>
   </div>
   <div class="nav-right">
@@ -213,22 +111,6 @@ input:focus,select:focus{border-color:var(--amber)}
         <td>Aug 31, 2026</td>
         <td><span class="pill-active">Active</span></td>
       </tr>
-      <tr>
-        <td><strong>Kevin T. Okafor</strong></td>
-        <td>$310,000</td>
-        <td>FHA</td>
-        <td>0.0% - 6.0%</td>
-        <td>Jul 15, 2026</td>
-        <td><span class="pill-active">Active</span></td>
-      </tr>
-      <tr>
-        <td><strong>Priya Nair</strong></td>
-        <td>$550,000</td>
-        <td>Jumbo</td>
-        <td>0.0% - 2.5%</td>
-        <td>Mar 1, 2026</td>
-        <td><span class="pill-expired">Expired</span></td>
-      </tr>
     </tbody>
   </table>
 </div>
@@ -266,36 +148,58 @@ input:focus,select:focus{border-color:var(--amber)}
         </div>
         <div class="borrow-field">
           <div class="borrow-label">Offer amount</div>
-          <input class="editable-val" id="b-amount" type="number" placeholder="Enter offer amount" value="398000" oninput="calculateAndValidateConcessions()">
+          <input class="editable-val" id="b-amount" type="number" placeholder="Enter offer amount" value="398000" oninput="handleOfferAmountChange()">
           <div class="cap-ok" id="b-amount-cap">✓ Within approved limit of $<span id="b-maxshow">425,000</span></div>
           <div class="alert" id="b-amount-alert">⚠ This exceeds your approved maximum. Please enter a lower amount.</div>
         </div>
         
-        <!-- Updated Concessions Calculation Section -->
+        <!-- Interactive Concessions System Area -->
         <div class="borrow-field">
           <div class="borrow-label">Seller Concessions Setup</div>
           
-          <div class="toggle-row">
-            <div>
-              <span style="font-size: 13px; font-weight:600;">Minimum: </span>
-              <span id="b-min-con-display">$0</span> (<span id="b-min-con-pct-label">0</span>%)
+          <!-- Minimum Blocks -->
+          <div class="toggle-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; font-weight:600; text-transform: uppercase; color: var(--brown);">Minimum Limits</span>
+              <label class="toggle-control">
+                <input type="checkbox" id="show-min-checkbox" checked onchange="syncPreview()"> Show on Letter
+              </label>
             </div>
-            <label class="toggle-control">
-              <input type="checkbox" id="show-min-checkbox" checked onchange="syncPreview()"> Show on Letter
-            </label>
+            <div class="two-col">
+              <div>
+                <label style="font-size: 9px; color: var(--muted)">Dollar Amount ($)</label>
+                <input class="editable-val" style="padding: 6px 10px; font-size: 13px;" type="number" id="b-min-val-dollar" oninput="convertConcession('min', 'dollar')">
+              </div>
+              <div>
+                <label style="font-size: 9px; color: var(--muted)">Percentage (%)</label>
+                <input class="editable-val" style="padding: 6px 10px; font-size: 13px;" type="number" step="0.1" id="b-min-val-pct" oninput="convertConcession('min', 'pct')">
+              </div>
+            </div>
+            <div class="hint" id="b-min-hint-bounds">Allowed floor range: 0% up to <span id="b-setup-min-floor">0</span>%</div>
           </div>
 
-          <div class="toggle-row">
-            <div>
-              <span style="font-size: 13px; font-weight:600;">Maximum: </span>
-              <span id="b-max-con-display">$0</span> (<span id="b-max-con-pct-label">0</span>%)
+          <!-- Maximum Blocks -->
+          <div class="toggle-row" style="flex-direction: column; align-items: stretch; gap: 8px; margin-top: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; font-weight:600; text-transform: uppercase; color: var(--brown);">Maximum Limits</span>
+              <label class="toggle-control">
+                <input type="checkbox" id="show-max-checkbox" checked onchange="syncPreview()"> Show on Letter
+              </label>
             </div>
-            <label class="toggle-control">
-              <input type="checkbox" id="show-max-checkbox" checked onchange="syncPreview()"> Show on Letter
-            </label>
+            <div class="two-col">
+              <div>
+                <label style="font-size: 9px; color: var(--muted)">Dollar Amount ($)</label>
+                <input class="editable-val" style="padding: 6px 10px; font-size: 13px;" type="number" id="b-max-val-dollar" oninput="convertConcession('max', 'dollar')">
+              </div>
+              <div>
+                <label style="font-size: 9px; color: var(--muted)">Percentage (%)</label>
+                <input class="editable-val" style="padding: 6px 10px; font-size: 13px;" type="number" step="0.1" id="b-max-val-pct" oninput="convertConcession('max', 'pct')">
+              </div>
+            </div>
+            <div class="hint" id="b-max-hint-bounds">Allowed ceiling cap: Max <span id="b-setup-max-cap">3.0</span>%</div>
           </div>
           
-          <div class="hint" style="margin-top: 4px;">Values automatically calculate based on your dynamic Offer Amount. Uncheck boxes to hide fields from the finalized letter completely.</div>
+          <div class="alert" id="b-concession-alert">⚠ Inputted values are outside the limits set by your lender. Setting to max allowed parameter bounds.</div>
         </div>
       </div>
       <div class="letter-footer">
@@ -343,7 +247,6 @@ input:focus,select:focus{border-color:var(--amber)}
           <span style="display:block; margin-top:6px;"><strong>Pre-Approved Purchase Price (not to exceed):</strong></span>
           <span class="amount-highlight" id="p-amount">$398,000</span>
           
-          <!-- Dynamic Concession Document Lines -->
           <div id="p-min-con-line" style="margin-top:4px;"><strong>Minimum Seller Concessions:</strong> <span id="p-p-mincon">$0</span></div>
           <div id="p-max-con-line" style="margin-top:4px;"><strong>Maximum Seller Concessions:</strong> <span id="p-p-maxcon">$0</span></div>
         </div>
@@ -364,7 +267,6 @@ input:focus,select:focus{border-color:var(--amber)}
 </div>
 
 <script>
-// Global parameter memory object
 let config = {
   borrower: "Sarah & James Morrow",
   maxAmount: 425000,
@@ -377,35 +279,27 @@ let config = {
 window.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
   
-  // If query strings exist, parse data and trigger clean Borrower view layout
   if (urlParams.has('b')) {
     config.borrower = urlParams.get('b');
     config.maxAmount = Number(urlParams.get('m')) || 425000;
     config.loanType = urlParams.get('l') || 'Conventional';
     config.minConPct = parseFloat(urlParams.get('mnC')) || 0.0;
-    config.maxConPct = parseFloat(urlParams.get('mxC')) || 0.0;
+    config.maxConPct = parseFloat(urlParams.get('mxC')) || 3.0;
     config.expiry = urlParams.get('e') || '2026-08-31';
     
-    // Hide administrative configurations tabs completely
     document.getElementById('navigation-tabs').classList.remove('admin-mode');
-    
-    // Set view to borrower
     switchTab('borrower');
   } else {
-    // Normal inside view for Eric
     document.getElementById('p-date').textContent = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
   }
 });
 
 function switchTab(name){
   const ids=['lo-setup','lo-dashboard','borrower','preview'];
-  
-  // Only handle tab styles if dashboard panel interface is active/visible
   const tabsContainer = document.getElementById('navigation-tabs');
   if(tabsContainer.classList.contains('admin-mode')) {
      document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',ids[i]===name));
   }
-  
   document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===name));
   if(name==='borrower') syncBorrower();
   if(name==='preview') syncPreview();
@@ -419,9 +313,12 @@ function generateLink(){
   const maxC = document.getElementById('lo-max-concessions-pct').value || 0;
   const exp = document.getElementById('lo-expiry').value || '2026-08-31';
 
-  // Build real dynamic URL mapping variables safely via base path strings
+  // Clean name string & clear out dates punctuation symbols 
+  const cleanStringName = borrower.replace(/[^a-zA-Z0-9]/g, '');
   const basePoint = window.location.origin + window.location.pathname;
-  const secureUrl = `${basePoint}?b=${encodeURIComponent(borrower)}&m=${max}&l=${encodeURIComponent(type)}&mnC=${minC}&mxC=${maxC}&e=${exp}`;
+  
+  // Output clean parametric shareable URL variables
+  const secureUrl = `${basePoint}?b=${encodeURIComponent(cleanStringName)}&m=${max}&l=${encodeURIComponent(type)}&mnC=${minC}&mxC=${maxC}&e=${exp}`;
 
   document.getElementById('link-url').textContent = secureUrl;
   document.getElementById('link-box').style.display = 'flex';
@@ -440,26 +337,89 @@ function syncBorrower(){
   document.getElementById('b-maxshow').textContent = Number(config.maxAmount).toLocaleString();
   document.getElementById('b-exp-date').textContent = config.expiry;
   
-  calculateAndValidateConcessions();
+  document.getElementById('b-setup-min-floor').textContent = config.minConPct;
+  document.getElementById('b-setup-max-cap').textContent = config.maxConPct;
+
+  // Set standard starting baseline parameters
+  const offerAmt = Number(document.getElementById('b-amount').value) || 0;
+  
+  document.getElementById('b-min-val-pct').value = config.minConPct;
+  document.getElementById('b-min-val-dollar').value = Math.round(offerAmt * (config.minConPct / 100));
+  
+  document.getElementById('b-max-val-pct').value = config.maxConPct;
+  document.getElementById('b-max-val-dollar').value = Math.round(offerAmt * (config.maxConPct / 100));
+  
+  validateOfferLimits();
 }
 
-function calculateAndValidateConcessions(){
+function handleOfferAmountChange() {
+  validateOfferLimits();
+  // Readjust dollar fields relative to the new adjusted price basis anchor
+  const amt = Number(document.getElementById('b-amount').value) || 0;
+  const minPct = Number(document.getElementById('b-min-val-pct').value) || 0;
+  const maxPct = Number(document.getElementById('b-max-val-pct').value) || 0;
+  
+  document.getElementById('b-min-val-dollar').value = Math.round(amt * (minPct / 100));
+  document.getElementById('b-max-val-dollar').value = Math.round(amt * (maxPct / 100));
+}
+
+function validateOfferLimits() {
   const val = Number(document.getElementById('b-amount').value) || 0;
   const max = Number(config.maxAmount);
-  
-  // Toggle basic validation flags
   document.getElementById('b-amount-cap').style.display = (val > 0 && val <= max) ? 'block' : 'none';
   document.getElementById('b-amount-alert').classList.toggle('show', val > max);
-  
-  // Calculate specific mathematical figures relative to purchase offer size
-  const minDollar = (val * (config.minConPct / 100));
-  const maxDollar = (val * (config.maxConPct / 100));
-  
-  document.getElementById('b-min-con-pct-label').textContent = config.minConPct;
-  document.getElementById('b-max-con-pct-label').textContent = config.maxConPct;
-  
-  document.getElementById('b-min-con-display').textContent = '$' + Math.round(minDollar).toLocaleString();
-  document.getElementById('b-max-con-display').textContent = '$' + Math.round(maxDollar).toLocaleString();
+}
+
+function convertConcession(type, sourceField) {
+  const amt = Number(document.getElementById('b-amount').value) || 0;
+  const alertBanner = document.getElementById('b-concession-alert');
+  alertBanner.classList.remove('show');
+
+  if(amt <= 0) return;
+
+  if(type === 'min') {
+    let pctVal = 0;
+    if(sourceField === 'dollar') {
+      const dollarVal = Number(document.getElementById('b-min-val-dollar').value) || 0;
+      pctVal = (dollarVal / amt) * 100;
+    } else {
+      pctVal = Number(document.getElementById('b-min-val-pct').value) || 0;
+    }
+
+    // Restrict within specific structural parameters
+    if (pctVal < 0 || pctVal > config.maxConPct) {
+      alertBanner.classList.add('show');
+      pctVal = (pctVal < 0) ? 0 : config.maxConPct;
+    }
+
+    if(sourceField === 'dollar') {
+      document.getElementById('b-min-val-pct').value = parseFloat(pctVal.toFixed(2));
+    } else {
+      document.getElementById('b-min-val-dollar').value = Math.round(amt * (pctVal / 100));
+    }
+
+  } else if (type === 'max') {
+    let pctVal = 0;
+    if(sourceField === 'dollar') {
+      const dollarVal = Number(document.getElementById('b-max-val-dollar').value) || 0;
+      pctVal = (dollarVal / amt) * 100;
+    } else {
+      pctVal = Number(document.getElementById('b-max-val-pct').value) || 0;
+    }
+
+    // Boundary caps checks execution
+    if (pctVal < config.minConPct || pctVal > config.maxConPct) {
+      alertBanner.classList.add('show');
+      pctVal = (pctVal > config.maxConPct) ? config.maxConPct : config.minConPct;
+    }
+
+    if(sourceField === 'dollar') {
+      document.getElementById('b-max-val-pct').value = parseFloat(pctVal.toFixed(2));
+    } else {
+      document.getElementById('b-max-val-dollar').value = Math.round(amt * (pctVal / 100));
+    }
+  }
+  syncPreview();
 }
 
 function generateLetter(){
@@ -482,10 +442,11 @@ function syncPreview(){
   const amt = Number(document.getElementById('b-amount').value) || 0;
   document.getElementById('p-amount').textContent = '$' + amt.toLocaleString();
   
-  const minDollar = Math.round(amt * (config.minConPct / 100));
-  const maxDollar = Math.round(amt * (config.maxConPct / 100));
+  const minDollar = Number(document.getElementById('b-min-val-dollar').value) || 0;
+  const minPct = Number(document.getElementById('b-min-val-pct').value) || 0;
+  const maxDollar = Number(document.getElementById('b-max-val-dollar').value) || 0;
+  const maxPct = Number(document.getElementById('b-max-val-pct').value) || 0;
   
-  // Handle DOM element display visibility switches base on current state configurations 
   const showMin = document.getElementById('show-min-checkbox').checked;
   const showMax = document.getElementById('show-max-checkbox').checked;
   
@@ -494,14 +455,14 @@ function syncPreview(){
   
   if(showMin) {
     minLine.style.display = 'block';
-    document.getElementById('p-p-mincon').textContent = '$' + minDollar.toLocaleString() + ' (' + config.minConPct + '%)';
+    document.getElementById('p-p-mincon').textContent = '$' + minDollar.toLocaleString() + ' (' + minPct + '%)';
   } else {
     minLine.style.display = 'none';
   }
   
   if(showMax) {
     maxLine.style.display = 'block';
-    document.getElementById('p-p-maxcon').textContent = '$' + maxDollar.toLocaleString() + ' (' + config.maxConPct + '%)';
+    document.getElementById('p-p-maxcon').textContent = '$' + maxDollar.toLocaleString() + ' (' + maxPct + '%)';
   } else {
     maxLine.style.display = 'none';
   }
@@ -515,8 +476,10 @@ function downloadPDF(){
   const doc = new jsPDF({unit:'pt',format:'letter'});
   
   const amt = Number(document.getElementById('b-amount').value) || 0;
-  const minDollar = Math.round(amt * (config.minConPct / 100));
-  const maxDollar = Math.round(amt * (config.maxConPct / 100));
+  const minDollar = Number(document.getElementById('b-min-val-dollar').value) || 0;
+  const minPct = Number(document.getElementById('b-min-val-pct').value) || 0;
+  const maxDollar = Number(document.getElementById('b-max-val-dollar').value) || 0;
+  const maxPct = Number(document.getElementById('b-max-val-pct').value) || 0;
   
   const showMin = document.getElementById('show-min-checkbox').checked;
   const showMax = document.getElementById('show-max-checkbox').checked;
@@ -550,18 +513,18 @@ function downloadPDF(){
   y-=4;doc.setFont('helvetica','normal');doc.setFontSize(11);doc.text(config.loanType,130,y-12);y+=6;
   
   ln('Pre-Approved Purchase Price (not to exceed):',true,10);
-  doc.setFont('helvetica','bold');doc.setFontSize(20);doc.setTextColor(61,43,31);
+  doc.setFont('helvetica','bold');doc.setFontSize(20);doc.setFillColor(61,43,31);
   doc.text('$' + amt.toLocaleString(),m,y+4);y+=28;
   doc.setTextColor(26,20,16);
   
   if(showMin) {
      ln('Minimum Seller Concessions:',true,10);
-     y-=4;doc.setFont('helvetica','normal');doc.setFontSize(11);doc.text('$' + minDollar.toLocaleString() + ' (' + config.minConPct + '%)',200,y-12);y+=10;
+     y-=4;doc.setFont('helvetica','normal');doc.setFontSize(11);doc.text('$' + minDollar.toLocaleString() + ' (' + minPct + '%)',200,y-12);y+=10;
   }
   
   if(showMax) {
      ln('Maximum Seller Concessions:',true,10);
-     y-=4;doc.setFont('helvetica','normal');doc.setFontSize(11);doc.text('$' + maxDollar.toLocaleString() + ' (' + config.maxConPct + '%)',200,y-12);y+=10;
+     y-=4;doc.setFont('helvetica','normal');doc.setFontSize(11);doc.text('$' + maxDollar.toLocaleString() + ' (' + maxPct + '%)',200,y-12);y+=10;
   }
   
   if(address){ln('Subject Property: '+address);y+=4;}
